@@ -365,4 +365,61 @@ const summFounded= itCompanies.reduce(function(total,company){ // first parament
   ///ES6
 
   const summFoundedES6= itCompanies.reduce((total,company) =>total + company.founded,10);
-  console.log('summFoundedES6',summFoundedES6)
+  console.log('summFoundedES6',summFoundedES6);
+
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  //Prototypes
+
+  //Concept of inheritance i.e mechanism by which JS object innherits fetures of one object into another
+
+  const objP1={
+    "name": "Alice",
+    "age": 12
+    // __proto__: objP3 //---> error --> objeP3 accessd before initialisation
+  }
+   const objP2={
+    "name": "Bob",
+    "grade": "B",
+    __proto__: objP1
+  }
+   const objP3={
+    "age": 14,
+    "grade": "C",
+    __proto__: objP2
+  }
+
+  console.log('Prototypes',objP3.name) //*--> Bob as first parent has name key
+  console.log('Prototypes',objP2.age) //*--> 12 as first parent has age key
+  console.log('Prototypes',objP3.year) //*--> undefined as none of  parent has year key
+
+  // lets try to get prototypes of object and arrays
+  const array = new Array();
+  console.log(array);
+  console.log("Array prototype:",Array.prototype);//-> shows all the methods in an array
+
+  const object = new Object();
+  console.log(object);
+  console.log("Object prototype:",Object.prototype);//-> shows all the methods in an Object
+
+
+  // Creating Prototypes
+
+  Array.prototype.show=function(){
+    return this;
+  }
+  console.log(age.show()); //---> we'll see our show function in the list of array prototypes
+
+  //Similarly we can create prototypes as per our requirements and use them on array or objects
+  //  just like a inbuilt method like push, pop, slice
+
+  //example
+
+  Array.prototype.convertintoObject= function(){
+    var objProto={};
+    this.forEach(element=>{
+      objProto[element]=element; // just for reference I put both key and value as element
+    })
+    return objProto;
+  }
+  console.log(age.convertintoObject()); //---> {10: 10, 20: 20, 30: 30, 40: 40, 50: 50}
