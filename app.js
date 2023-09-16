@@ -90,8 +90,8 @@ console.log("studsCopy2", studsCopy2);
 
 //  output
 //studsData John Doe {age: 20, school: 'University of California, Berkeley', major: 'Computer Science', gpa: 3.9}
-//studsCopy {name: 'John Doe', age: 20, school: 'University of California, Berkeley', major: 'Computer Science', gpa: 3.9}
-//studsCopy2 {name: 'John Doe', age: 21, school: 'University of California, Berkeley', major: 'Computer Science', gpa: 38.9}
+//studsCopy {age: 20, school: 'University of California, Berkeley', major: 'Computer Science', gpa: 3.9}
+//studsCopy2 {age: 21, school: 'University of California, Berkeley', major: 'Computer Science', gpa: 38.9}
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -271,7 +271,7 @@ console.log(storeBind(), "applyBindMethod");
 //these are the functions which take another function as an argument or returns a function
 //e.g. forEach, map , filter , reduce, sort etc
 
-//earlier we use to use for loop to iterate fdata like
+//earlier we use to use for loop to iterate data like
 for (let i = 0; i < itCompanies.length; i++) {
   console.log("ES FOR loop", itCompanies[i].name);
 }
@@ -320,11 +320,7 @@ itCompanies.map((company, index) => {
 });
 
 //add condtion to ES6
-itCompanies.map((company) =>
-  company.founded < 2000
-    ? console.log("Map ES6 Condition ", company.name)
-    : "no"
-);
+itCompanies.map((company) => company.founded < 2000 ? console.log("Map ES6 Condition ", company.name) : "no");
 
 // Sort Method
 
@@ -337,9 +333,7 @@ let sorted = itCompanies.sort(function (c1, c2) {
 });
 console.log("sorted", sorted);
 
-let sortedES6 = itCompanies.sort((c1, c2) =>
-  c1.founded > c2.founded ? 1 : -1
-);
+let sortedES6 = itCompanies.sort((c1, c2) => c1.founded > c2.founded ? 1 : -1 );
 console.log("sortedES6", sortedES6);
 
 let sortAge = age.sort((c1, c2) => (c1 < c2 ? 1 : -1));
@@ -423,3 +417,62 @@ const summFounded= itCompanies.reduce(function(total,company){ // first parament
     return objProto;
   }
   console.log(age.convertintoObject()); //---> {10: 10, 20: 20, 30: 30, 40: 40, 50: 50}
+
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  // MAP, SET, WEAKMAP, WEAKSET
+
+
+  // MAP:
+  //   map is used when you want to store unique values from your collection into another variable without any duplicates
+  
+  // let arr1 = [1,2,3,4,8];
+  // let arr2 = [11,21,31,41,81];
+  let map = new Map([["name","Shrey"],["age","20"]]);
+  console.log(`Map`,map)// -> Map {size: 2, [[Entries]]: Array(2)} -> {'name' => 'Shrey', 'age' => '20'}
+
+  let map1 = new Map([["name","Shrey"],["age","20"],["age","200"]]);
+  // In this case age will store 200 as value as in Map duplicates are not allow, but wwe can change the existing value by using it's set method
+  console.log(`Map1`,map1)// -> Map1 {size: 2, [[Entries]]: Array(2)} -> {'name' => 'Shrey', 'age' => '200'}
+
+  // example
+  map1.set("name","Baba")
+  console.log(`Map1Updated`,map1)// -> Map1Updated{size: 2, [[Entries]]: Array(2)} -> {'name' => 'Baba', 'age' => '200'}
+
+  for(let [key,value] of map1){
+    console.log(`msp ${key}:${value}`);// name: Baba , age : 200
+  }
+
+  map1.forEach((value,key)=>{ /// in this we use value, key instead of key, value during iteration
+    console.log("iterate map", key ,value);
+  })
+
+// SET--- is used when you want to store unique values from your collection into an object without any duplicates
+
+// object constructor
+const set =new Set(["apple","banana"]);
+console.log('Set',set);//-> Set {"apple", "banana"}
+
+// like any other object set also have it's own prototype methods like add, delete, size etc
+
+set.add("9");
+console.log('SetAdd',set); //-> Set {"apple", "banana", "9"}
+set.delete("apple");
+console.log('SetDelete',set);//-> Set {"banana", "9"}
+
+// Weak Map --- We can only store object which can't be iterated
+var wm=new WeakMap();
+var objWM1={};
+var objWM2={"name":"Shrey"};
+wm.set(objWM1,"hello world"); // in this case object itself will act as key we can see that in console, here set method of Weak map expect us to pass 2 aruments which can act as key and value.
+wm.set(objWM2,"hey buddy");
+console.log("Weak Map",wm);
+console.log("Weak Map objWM2",objWM2);
+
+// Weak Set --- We can only store object which can't be iterated
+var ws=new WeakSet();
+var objWS1={};
+var objWS2={"name":"Shrey"};
+ws.add(objWS1);
+ws.add(objWS2);
+console.log("Weak Set",ws); //--- > object of objects objWS1 and objWS2
