@@ -476,3 +476,145 @@ var objWS2={"name":"Shrey"};
 ws.add(objWS1);
 ws.add(objWS2);
 console.log("Weak Set",ws); //--- > object of objects objWS1 and objWS2
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`
+
+// Event Bubblling, Capturing, Stop Propagation and Prevent Default
+
+// Event Bubblling
+const tagetDiv = document.getElementsByClassName('events');
+const tagetBtn = document.getElementsByClassName('btn');
+const tagetLink = document.getElementsByClassName('link');
+
+tagetDiv[0].addEventListener('click', function (e) {
+  
+  alert("tested") // here we can see that the event is associated with the div with class 'event' but when we click button inside this div,
+  //  this event is also triggered.
+  // this is called event bubbling
+});
+
+tagetBtn[0].addEventListener('click', function (e) {
+  alert("tested -- btn clicked") // here we can see that the event is associated with button inside this div,
+  //  this event is also triggered along with the div with class 'event' but priority will be child's event i.e Button in this case
+});
+
+// Event Capturing
+// tagetDiv[0].addEventListener('click', function (e) {
+//   alert("tested") 
+// },true); // here if we set value as true, then event associated with parent will be prioritised over child's this is called event Capturing
+
+//By default value of capturing is set to false.
+
+// Event Stop Propagation
+// tagetBtn[0].addEventListener('click', function (e) {
+//   e.stopPropagation(); // we have added this here to stop the process of bubbling. i.e child's event will be triggered but parent won't.
+//   alert("tested -- btn clicked") 
+// });
+
+// Event Stop Immmediate Propagation
+
+// we can see , we have multiple events associated with a single element here
+
+tagetDiv[0].addEventListener('click', function (e) {
+  e.stopImmediatePropagation(); // By using this , we will be stopping the any forecoming event associated with the same element
+  //i.e the next event won't be triggered. 
+  alert("tested 2")
+});
+tagetDiv[0].addEventListener('click', function (e) {
+  alert("tested 3") // this won't be triggered as above event is having e.stopImmediatePropagation().
+});
+
+// Event Prevent Default
+
+tagetLink[0].addEventListener('click', function (e) {
+  e.preventDefault();
+  alert("tested link here") // here this alert will be triggered but since we have used preventDefault, so this anchor tag won't be opening any link. 
+  //i.e we have prevented the default behavior of the anchor tag.
+});
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+//Currrying Functions -- it transforms a function with multiple arguments into a nested series of functions with single arguments
+
+//generally we create any function like this
+
+function getSum(a,b,c){
+  return a+b+c;
+}
+
+console.log('getSum', getSum(1,2,3));
+
+//Now by using currying we can do like this, by creating higher order functions
+
+function currySum(a){
+  return function(b){
+    return function(c){
+      return a+b+c;
+    }
+  }
+}
+
+console.log('currySum', currySum(1)(2)(3));
+
+//another example
+
+let objectCurry  = {
+  "name":"Shrey",
+  "age":"20"
+}
+
+function info(object){
+  return function(values){
+    return object[values];
+  }
+}
+
+console.log('infoCurry',info(objectCurry)("name"));
+console.log('infoCurry',info(objectCurry)("age"));
+
+///////Infinite Currying
+
+// to get sum of infiinte no. of values
+
+function infiniteCurrying(a){
+  return function(b){
+    if(b){
+      return infiniteCurrying(a+b);
+    }else{
+      return a;
+    }
+  }
+}
+
+console.log('infiniteCurrying', infiniteCurrying(1)(2)(3)(4)(5)(6)(7)(8)());  //-- we put an empty paranthesis at last here
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+//Debouncing -- In this we take a function and returns a bettter function after some delay to optimize the performance of web site
+
+const inputField = document.getElementsByClassName('inputField');
+const inputFieldDebounce = document.getElementsByClassName('inputFieldDebounce');
+var counter=0;
+function getDataOnKeypress(){
+  console.log('keypressed',counter++);
+}
+
+inputField[0].addEventListener('keypress',function(){
+  getDataOnKeypress(); // issue eith this function will be that on every keypress event will be triggered. That may not be optimized for the webpage
+});
+// this thing is usually faced in search bar where instead of triggering event on every keypress we wait for sometime and then trigger the event
+
+
+function debounce(callback, interval) {
+  var timer;
+  return function(...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      callback();
+    }, interval);
+  };
+}
+
+const betterFunction = debounce(getDataOnKeypress,1000); /// by using this we'll save a lot of memory by not doing uneccesary calls to the api to fetch data
+// it will allow user to type properly and then it will show the data
