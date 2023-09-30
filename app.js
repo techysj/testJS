@@ -618,3 +618,154 @@ function debounce(callback, interval) {
 
 const betterFunction = debounce(getDataOnKeypress,1000); /// by using this we'll save a lot of memory by not doing uneccesary calls to the api to fetch data
 // it will allow user to type properly and then it will show the data
+
+inputFieldDebounce[0].addEventListener('keypress',function(){
+  betterFunction();
+});
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// Throttle -- In this we take a function and returns a bettter function , used to limit the number of function calls on any event the performance of web site
+
+const throttlenonBtn = document.getElementById('throttlenonBtn');
+const throttleBtn = document.getElementById('throttleBtn');
+
+throttlenonBtn.addEventListener('click',function(){
+  console.log('throttled');
+});
+
+function throttle(callback, interval) {
+  return function(){
+    throttleBtn.disabled  = true;
+    setTimeout(() => {
+      callback();
+    }, interval);
+  }
+}
+
+const betterthrottleFunction = throttle(()=>{
+  throttleBtn.disabled  = false;
+  console.log('throttle done');
+},1000); /// by using this we'll save a lot of memory by not doing uneccesary calls to the event
+
+throttleBtn.addEventListener('click',function(){
+  betterthrottleFunction();
+});
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// Creating Promise
+
+let cart  =  ['a','b','c'];
+
+function getCart(){
+  return new Promise((resolve,reject) => {
+    if(!validateCart()){
+      let err = new Error("Validate properly");
+      reject(err);
+    }else{
+      resolve("Cart Validated sucessfully");
+    }
+  })
+}
+function validateCart(){
+  return true;
+}
+
+getCart()
+.then((data) => {
+  console.log('PROMISE DATA',data);
+})
+.catch(function(err){
+  console.log(err.message);
+});
+
+// Async/ Await 
+
+// Async is a keyword used before a function to make that function a asynchronous function, which will rather return a promise
+//  or if we are passing a non promise data, it will create a promise, wrap our data into it and the return it.
+
+async function getCart1(){
+  if(!validateCart()){
+    let err = new Error("Validate properly");
+    throw err;
+  }else{
+    return "Cart Validated sucessfully";
+  }
+}
+const data = getCart1();
+data.then((res)=> console.log('ASYNC DATA',res));
+
+// HERE we can see using promise or sync we are getting the same result at last.
+
+// Await is a keyword used inside a async function . we write this keyword in front of a promise to handle it effectively.
+
+//Suppose we have a promise
+
+const promise = new Promise((resolve,reject)=>{
+  setTimeout(() => {
+    resolve("hi there it's resolved");    
+  }, 10000);
+});
+
+//Now brefore async await we used to handle a promise like:
+
+function getRealData(){
+  promise.then((res)=>console.log("Handled Promise without async/await-", res));
+  console.log('before promise execution') // this will be excecuted before ppromise
+}
+
+getRealData();
+
+//But incase we have some function or event to execute after that promise is resolved but with this approach. the call stack (JS engine)
+//  won't stop for promise to get executed completely and we might end up with error
+
+//Now we can use async await to handle a promise like:
+
+async function getRealData1(){
+  const res = await promise; // here it will wait for  the promise to get resolved and then move to next line -- 
+  // basically inside call stack the execution of this function gets suspended and resume from the same point where it stopped
+  console.log("Handled Promise with async/await-", res);
+}
+
+getRealData1();
+
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// Fetch--- It is a promise , which once rsolved gets us a response object having a body, shich has a redable stream.
+
+
+// ?Example -
+
+const API = "https://api.github.com/users"
+const API2 = "https://api.github.com/techysj"
+
+async function fetchData(){
+  const response = await fetch(API);
+  const data = await response.json(); ///----> it will give a json value
+  
+  console.log(data);
+
+// usually we write above steps as
+
+fetch(API).then((res)=>res.json()).then(res=>console.log('SHORTHAND',res));
+}
+
+fetchData();
+
+
+// Error handling in ASync Await
+
+async function fetchData1(){
+  try{
+    const response = await fetch(API2);
+    const data = await response.json(); ///----> it will give a json value
+    
+    console.log(data);
+  }catch(err){
+    console.log(err.message);
+  }
+}
+
+fetchData1();
